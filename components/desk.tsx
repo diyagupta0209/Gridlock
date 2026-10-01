@@ -69,8 +69,8 @@ export function Desk() {
   const queue = plan?.cells.filter((cell) => cell.inPlan) ?? []
 
   return (
-    <div className="grid min-h-0 flex-1 lg:grid-cols-[400px_minmax(0,1fr)]">
-      <section className="flex min-h-0 flex-col border-b border-border lg:border-r lg:border-b-0">
+    <div className="flex min-h-0 flex-1 flex-col overflow-y-auto lg:grid lg:grid-cols-[400px_minmax(0,1fr)] lg:overflow-hidden">
+      <section className="order-2 flex flex-col border-b border-border lg:order-1 lg:min-h-0 lg:border-r lg:border-b-0 lg:overflow-hidden">
         <div className="space-y-4 border-b border-border p-4">
           <div>
             <p className="font-heading text-lg tracking-wide text-primary">Tomorrow’s deployment</p>
@@ -139,7 +139,7 @@ export function Desk() {
           </label>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto">
+        <div className="max-h-80 overflow-y-auto lg:max-h-none lg:min-h-0 lg:flex-1">
           {loading && !plan ? (
             <p className="p-4 text-sm text-muted-foreground">Reading the saved forecast…</p>
           ) : null}
@@ -176,7 +176,14 @@ export function Desk() {
                       violations
                     </span>
                   </span>
-                  <span className="font-mono text-sm text-primary">{cell.priority.toFixed(0)}</span>
+                  <span className="text-right">
+                    <span className="block font-mono text-sm text-primary">
+                      {sort === "priority" ? cell.priority.toFixed(0) : cell.hotspotProb.toFixed(3)}
+                    </span>
+                    <span className="block text-[10px] tracking-wide text-muted-foreground uppercase">
+                      {sort === "priority" ? "impact" : "prob"}
+                    </span>
+                  </span>
                 </button>
               </li>
             ))}
@@ -185,7 +192,7 @@ export function Desk() {
         {selected ? <CellDetail cell={selected} weights={plan?.weights} /> : null}
       </section>
 
-      <section className="relative h-[48vh] min-h-72 lg:h-auto">
+      <section className="relative order-1 h-[42vh] min-h-64 shrink-0 overflow-hidden lg:order-2 lg:h-auto lg:min-h-0">
         <PatrolMap cells={plan?.cells ?? []} selected={selected} onSelect={setSelectedId} />
         <div className="pointer-events-none absolute bottom-3 left-3 rounded-lg border border-border bg-background/90 px-3 py-2 text-xs text-muted-foreground">
           Larger marks are on tomorrow’s list. Color tracks enforcement priority.
@@ -212,7 +219,7 @@ function CellDetail({
   weights?: { throughput: number; freight: number }
 }) {
   return (
-    <div className="border-t border-border bg-card p-4">
+    <div className="shrink-0 border-t border-border bg-card p-4">
       <p className="text-xs tracking-wide text-muted-foreground uppercase">{cell.gh6}</p>
       <h2 className="font-heading text-xl leading-tight">{cell.shortName}</h2>
       <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{cell.location}</p>
@@ -223,11 +230,11 @@ function CellDetail({
         <Row label="Priority" value={cell.priority.toFixed(1)} />
       </dl>
       <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-        Priority is hotspot probability times criticality. Criticality is{" "}
-        {Math.round((weights?.throughput ?? 0.6) * 100)}% volume and{" "}
+        Priority = hotspot probability × criticality (
+        {Math.round((weights?.throughput ?? 0.6) * 100)}% volume,{" "}
         {Math.round((weights?.freight ?? 0.4) * 100)}% heavy vehicles
-        {cell.smallSample ? ". This cell has a small sample, so criticality is reduced." : "."}{" "}
-        Heavy share {(cell.heavyShare * 100).toFixed(0)}%.
+        {cell.smallSample ? ", reduced for a small sample" : ""}). Heavy share{" "}
+        {(cell.heavyShare * 100).toFixed(0)}%.
       </p>
     </div>
   )
