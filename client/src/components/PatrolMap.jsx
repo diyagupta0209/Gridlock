@@ -12,9 +12,26 @@ function FlyTo({ cell }) {
   return null
 }
 
-function heat(priority) {
+function riskColor(priority) {
   const t = Math.max(0, Math.min(1, priority / 100))
-  return `hsl(18 ${30 + t * 55}% ${28 + t * 42}%)`
+  const stops = [
+    { at: 0, color: [245, 208, 40] },
+    { at: 0.45, color: [240, 138, 28] },
+    { at: 1, color: [214, 48, 32] },
+  ]
+  let lower = stops[0]
+  let upper = stops[stops.length - 1]
+  for (let i = 0; i < stops.length - 1; i += 1) {
+    if (t >= stops[i].at && t <= stops[i + 1].at) {
+      lower = stops[i]
+      upper = stops[i + 1]
+      break
+    }
+  }
+  const span = upper.at - lower.at || 1
+  const mix = (t - lower.at) / span
+  const rgb = lower.color.map((channel, index) => Math.round(channel + (upper.color[index] - channel) * mix))
+  return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`
 }
 
 export default function PatrolMap({ cells, selected, onSelect }) {
@@ -32,9 +49,9 @@ export default function PatrolMap({ cells, selected, onSelect }) {
           center={[cell.lat, cell.lon]}
           radius={cell.inPlan ? 9 : 4}
           pathOptions={{
-            color: cell.gh6 === selected?.gh6 ? "#f6f1e8" : heat(cell.priority),
+            color: cell.gh6 === selected?.gh6 ? "#f6f1e8" : riskColor(cell.priority),
             weight: cell.gh6 === selected?.gh6 ? 2 : 1,
-            fillColor: heat(cell.priority),
+            fillColor: riskColor(cell.priority),
             fillOpacity: cell.inPlan ? 0.92 : 0.45,
           }}
           eventHandlers={{ click: () => onSelect(cell.gh6) }}

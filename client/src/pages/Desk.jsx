@@ -176,7 +176,7 @@ export default function Desk() {
       </section>
       <section className="map-wrap">
         <PatrolMap cells={plan?.cells ?? []} selected={selected} onSelect={setSelectedId} />
-        <div className="legend">Larger marks are on tomorrow’s list. Color tracks enforcement priority.</div>
+        <div className="legend">Larger marks are on tomorrow’s list. Yellow is lower risk, orange is medium, red is highest.</div>
       </section>
     </div>
   )
