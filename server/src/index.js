@@ -35,7 +35,13 @@ app.get("/api/patrol", async (req, res) => {
     sort: req.query.sort,
     freightOnly: req.query.freightOnly,
   })
-  res.json(rankCells(cells, options))
+  const ranked = rankCells(cells, options)
+  ranked.source = {
+    database: mongoose.connection.name,
+    collection: Cell.collection.collectionName,
+    count: cells.length,
+  }
+  res.json(ranked)
 })
 
 app.get("/api/plans", async (_req, res) => {

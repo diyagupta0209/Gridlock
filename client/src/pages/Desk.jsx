@@ -83,11 +83,13 @@ export default function Desk() {
         <div className="controls">
           <p className="kicker">Tomorrow’s deployment</p>
           <p className="lede">
-            LightGBM scores are stored in MongoDB. Express multiplies each score by road criticality
-            and keeps the top of the list.
+            {plan?.source
+              ? `Read ${plan.source.count} forecast cells from MongoDB database ${plan.source.database}, collection ${plan.source.collection}.`
+              : "Reading the forecast from MongoDB."}{" "}
+            Express multiplies each score by road criticality and keeps the top of the list.
           </p>
           <div className="stats">
-            <div className="stat"><small>Cells</small><b>{plan ? plan.model.cells : "—"}</b></div>
+            <div className="stat"><small>Cells from MongoDB</small><b>{plan?.source ? plan.source.count : "—"}</b></div>
             <div className="stat"><small>ROC-AUC</small><b>0.945</b></div>
             <div className="stat">
               <small>History covered</small>
