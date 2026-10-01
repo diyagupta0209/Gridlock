@@ -63,6 +63,7 @@ export function rankCells(raw, input) {
       predIntensity: cell.predIntensity,
       hotspotProb: cell.hotspotProb,
       totalViol: cell.totalViol,
+      pastViolations: cell.pastViolations ?? cell.totalViol,
       heavyShare: cell.heavyShare,
       peakHour: cell.peakHour,
       shortName: shortPlace(cell.location),

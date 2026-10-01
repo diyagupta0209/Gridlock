@@ -132,7 +132,11 @@ export default function Desk() {
                     {cell.shortName}
                     {cell.freight ? <span className="badge">Freight</span> : null}
                   </strong>
-                  <em>Peak {formatHour(cell.peakHour)} · {cell.totalViol.toLocaleString()} past violations</em>
+                  <em>Peak {formatHour(cell.peakHour)}</em>
+                </span>
+                <span className="score">
+                  <b>{cell.totalViol.toLocaleString()}</b>
+                  <small>PAST</small>
                 </span>
                 <span className="score">
                   <b>{sort === "priority" ? cell.priority.toFixed(0) : cell.hotspotProb.toFixed(3)}</b>
@@ -148,6 +152,7 @@ export default function Desk() {
             <h2>{selected.shortName}</h2>
             <p className="addr">{selected.location}</p>
             <div className="facts">
+              <div><small>Past violations</small><b>{selected.totalViol.toLocaleString()}</b></div>
               <div><small>Predicted violations</small><b>{selected.predIntensity.toFixed(1)}</b></div>
               <div><small>Hotspot probability</small><b>{selected.hotspotProb.toFixed(2)}</b></div>
               <div><small>Road criticality</small><b>{selected.criticality.toFixed(2)}</b></div>

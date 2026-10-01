@@ -9,6 +9,7 @@ const cellSchema = new mongoose.Schema(
     predIntensity: { type: Number, required: true },
     hotspotProb: { type: Number, required: true },
     totalViol: { type: Number, required: true },
+    pastViolations: { type: Number, required: true },
     heavyShare: { type: Number, required: true },
     peakHour: { type: Number, required: true },
   },

@@ -47,7 +47,7 @@ export default function Plans() {
               <ol>
                 {plan.stops.slice(0, 5).map((stop) => (
                   <li key={stop.gh6}>
-                    {stop.shortName} · priority {stop.priority.toFixed(0)} · peak {formatHour(stop.peakHour)}
+                    {stop.shortName} · {Number(stop.totalViol || 0).toLocaleString()} past violations · priority {stop.priority.toFixed(0)} · peak {formatHour(stop.peakHour)}
                   </li>
                 ))}
               </ol>

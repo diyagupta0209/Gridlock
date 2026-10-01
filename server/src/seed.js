@@ -20,6 +20,7 @@ export function readForecast() {
     predIntensity: Number(row.pred_intensity),
     hotspotProb: Number(row.hotspot_prob),
     totalViol: Number(row.total_viol),
+    pastViolations: Number(row.total_viol),
     heavyShare: Number(row.heavy_share),
     peakHour: Number(row.peak_hour),
   }))
@@ -27,8 +28,11 @@ export function readForecast() {
 
 export async function seedIfEmpty() {
   const existing = await Cell.estimatedDocumentCount()
-  if (existing > 0) return existing
-  const cells = readForecast()
-  await Cell.insertMany(cells, { ordered: false })
-  return cells.length
+  if (existing === 0) {
+    const cells = readForecast()
+    await Cell.insertMany(cells, { ordered: false })
+    return cells.length
+  }
+  await Cell.updateMany({ pastViolations: { $exists: false } }, [{ $set: { pastViolations: "$totalViol" } }])
+  return existing
 }
