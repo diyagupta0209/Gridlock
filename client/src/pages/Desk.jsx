@@ -122,6 +122,12 @@ export default function Desk() {
         {loading && !plan ? <p className="empty">Reading the forecast from MongoDB…</p> : null}
         {error ? <p className="banner error">{error}</p> : null}
         {plan && queue.length === 0 ? <p className="empty">No cells match this filter.</p> : null}
+        <div className="queue-head">
+          <span>#</span>
+          <span>Area</span>
+          <span>Past</span>
+          <span>Impact</span>
+        </div>
         <ol className="queue">
           {queue.map((cell) => (
             <li key={cell.gh6}>

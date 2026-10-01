@@ -53,8 +53,8 @@ nav a.active { background: var(--card); color: var(--text); }
 }
 .side, .map-wrap { min-width: 0; }
 .side { display: flex; flex-direction: column; border-bottom: 1px solid var(--line); }
-.controls, .detail { padding: 16px; }
-.controls { border-bottom: 1px solid var(--line); }
+.controls, .detail { padding: 12px 16px; }
+.controls { flex: 0 0 auto; border-bottom: 1px solid var(--line); }
 .kicker {
   margin: 0;
   color: var(--accent);
@@ -92,16 +92,38 @@ button:disabled { opacity: 0.5; cursor: default; }
   border-radius: 8px;
   padding: 8px 10px;
 }
-.queue { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow: auto; }
+.queue-head, .queue { padding-left: 16px; padding-right: 16px; }
+.queue-head {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 72px 64px;
+  gap: 10px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--line);
+}
+.queue-head span:nth-child(n + 3) { text-align: right; }
+.queue {
+  list-style: none;
+  margin: 0;
+  overflow: auto;
+  min-height: 280px;
+  flex: 1 1 280px;
+}
 .queue button {
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 72px 64px;
   gap: 10px;
+  align-items: center;
   text-align: left;
   background: transparent;
   border: 0;
   border-bottom: 1px solid var(--line);
-  padding: 12px 16px;
+  padding: 10px 0;
   cursor: pointer;
 }
 .queue button.selected, .queue button:hover { background: var(--card); }
@@ -122,7 +144,7 @@ button:disabled { opacity: 0.5; cursor: default; }
 .score { text-align: right; }
 .score b { display: block; font-family: "IBM Plex Mono", monospace; color: var(--accent); font-weight: 500; }
 .score small { color: var(--muted); letter-spacing: 0.06em; font-size: 10px; }
-.detail { background: var(--panel); border-top: 1px solid var(--line); }
+.detail { flex: 0 0 auto; max-height: 168px; overflow: auto; background: var(--panel); border-top: 1px solid var(--line); }
 .detail h2 { margin: 2px 0 0; font-family: "Barlow Condensed", sans-serif; font-size: 26px; font-weight: 600; }
 .detail .addr { color: var(--muted); font-size: 12px; }
 .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; margin: 12px 0 0; }
@@ -169,12 +191,10 @@ th, td { padding: 8px 10px; border-top: 1px solid var(--line); }
 .plan ol { margin: 8px 0 0; padding-left: 18px; color: var(--muted); }
 
 @media (min-width: 980px) {
-  .desk { display: grid; grid-template-columns: 400px minmax(0, 1fr); overflow: hidden; }
-  .side { border-bottom: 0; border-right: 1px solid var(--line); min-height: 0; overflow: hidden; }
-  .queue { max-height: none; flex: 1; }
-  .map-wrap { height: auto; min-height: 0; }
-  .side { order: 1; }
-  .map-wrap { order: 2; }
+  .desk { display: grid; grid-template-columns: 420px minmax(0, 1fr); overflow: hidden; }
+  .side { order: 1; min-height: 0; overflow: hidden; border-bottom: 0; border-right: 1px solid var(--line); }
+  .queue { max-height: none; min-height: 220px; flex: 1 1 220px; }
+  .map-wrap { order: 2; height: auto; min-height: 0; }
 }
 @media (max-width: 979px) {
   .map-wrap { order: -1; }
