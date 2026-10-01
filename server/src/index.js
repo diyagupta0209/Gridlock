@@ -1,6 +1,8 @@
 import express from "express"
 import cors from "cors"
 import mongoose from "mongoose"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 import { connectDb } from "./db.js"
 import { Cell, Deployment } from "./models.js"
 import { MODEL_CARD } from "./modelCard.js"
@@ -86,6 +88,12 @@ app.delete("/api/plans/:id", async (req, res) => {
     return
   }
   res.json({ ok: true })
+})
+
+const clientBuild = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../client/dist")
+app.use(express.static(clientBuild))
+app.get(/^(?!\/api).*/, (_req, res) => {
+  res.sendFile(path.join(clientBuild, "index.html"))
 })
 
 const port = Number(process.env.PORT || 47821)
